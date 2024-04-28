@@ -6,8 +6,6 @@ import com.shepherdmoney.interviewproject.repository.CreditCardRepository;
 import com.shepherdmoney.interviewproject.repository.UserRepository;
 import com.shepherdmoney.interviewproject.utils.Utils;
 import com.shepherdmoney.interviewproject.vo.request.AddCreditCardToUserPayload;
-import com.shepherdmoney.interviewproject.vo.request.CreateUserPayload;
-import com.shepherdmoney.interviewproject.vo.request.UpdateBalancePayload;
 import com.shepherdmoney.interviewproject.vo.response.CreditCardView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,9 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeMap;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,7 +64,6 @@ public class CreditCardController {
         CreditCard creditCard = new CreditCard();
         creditCard.setNumber(cardNumber);
         creditCard.setIssuanceBank(cardIssuanceBank);
-//        creditCard.setBalanceHistories(new TreeMap<>());
 
         // associate that credit card with user
         user.getCreditCards().add(creditCard);

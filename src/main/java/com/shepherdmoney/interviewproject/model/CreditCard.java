@@ -5,9 +5,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.collection.spi.PersistentSortedMap;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 @Entity
@@ -53,8 +56,9 @@ public class CreditCard {
     // use TreeMap to ensure sorting by date
     // refer to this blog:
     // https://stackoverflow.com/questions/25439813/difference-between-mapkey-mapkeycolumn-and-mapkeyjoincolumn-in-jpa-and-hiber
-//    @OneToMany(mappedBy = "creditCard", cascade = CascadeType.ALL)
-//    @MapKey(name = "date")
-////    @OrderBy("date DESC")
-//    private TreeMap<LocalDate, BalanceHistory> balanceHistories;
+    @OneToMany(mappedBy = "creditCard", cascade = CascadeType.ALL)
+    @MapKey(name = "date")
+//    @OrderBy("date DESC")
+    @MapKeyTemporal(TemporalType.DATE)
+    private Map<LocalDate, BalanceHistory> balanceHistories = new TreeMap<>();
 }

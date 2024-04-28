@@ -24,7 +24,7 @@ public class BalanceHistory {
     private double balance;
 
     // relationship with the CreditCard table
-//    @ManyToOne
-//    private CreditCard creditCard;
+    @ManyToOne
+    private CreditCard creditCard;
     
 }
