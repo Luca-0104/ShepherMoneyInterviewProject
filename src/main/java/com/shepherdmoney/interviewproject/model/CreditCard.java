@@ -53,8 +53,8 @@ public class CreditCard {
     // use TreeMap to ensure sorting by date
     // refer to this blog:
     // https://stackoverflow.com/questions/25439813/difference-between-mapkey-mapkeycolumn-and-mapkeyjoincolumn-in-jpa-and-hiber
-    @OneToMany(mappedBy = "creditCard", cascade = CascadeType.ALL)
-    @MapKey(name = "date")
-//    @OrderBy("date DESC")
-    private TreeMap<LocalDate, BalanceHistory> balanceHistories;
+//    @OneToMany(mappedBy = "creditCard", cascade = CascadeType.ALL)
+//    @MapKey(name = "date")
+////    @OrderBy("date DESC")
+//    private TreeMap<LocalDate, BalanceHistory> balanceHistories;
 }
