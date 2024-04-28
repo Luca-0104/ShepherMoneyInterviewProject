@@ -6,6 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.TreeMap;
+
 @Entity
 @Getter
 @Setter
@@ -45,4 +49,12 @@ public class CreditCard {
     //        4. Deletion of a balance should be fast
     //        5. It is possible that there are gaps in between dates (note the 04-13 and 04-16)
     //        6. In the condition that there are gaps, retrieval of "closest" balance date should also be fast. Aka, given 4-15, return 4-16 entry tuple
+
+    // use TreeMap to ensure sorting by date
+    // refer to this blog:
+    // https://stackoverflow.com/questions/25439813/difference-between-mapkey-mapkeycolumn-and-mapkeyjoincolumn-in-jpa-and-hiber
+    @OneToMany(mappedBy = "creditCard", cascade = CascadeType.ALL)
+    @MapKey(name = "date")
+    @OrderBy("date DESC")
+    private TreeMap<LocalDate, BalanceHistory> balanceHistories;
 }
