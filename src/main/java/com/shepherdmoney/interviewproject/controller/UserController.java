@@ -36,9 +36,7 @@ public class UserController {
         }
 
         // check if the username or email is already used
-        List<User> usersByName = userRepository.findAllByName(name);
-        List<User> usersByEmail = userRepository.findAllByEmail(email);
-        if (!usersByName.isEmpty() || !usersByEmail.isEmpty()) {
+        if (userRepository.existsByName(name) || userRepository.existsByEmail(email)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(-1);
         }
 
