@@ -36,7 +36,7 @@ public class UserController {
         }
 
         // check if the username or email is already used
-        List<User> usersByName = userRepository.findAllByName("Lucas");
+        List<User> usersByName = userRepository.findAllByName(name);
         List<User> usersByEmail = userRepository.findAllByEmail(email);
         if (!usersByName.isEmpty() || !usersByEmail.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(-1);
@@ -58,6 +58,14 @@ public class UserController {
         // TODO: Return 200 OK if a user with the given ID exists, and the deletion is successful
         //       Return 400 Bad Request if a user with the ID does not exist
         //       The response body could be anything you consider appropriate
-        return null;
+
+        // check if a user with the given ID exists
+        if (!userRepository.existsById(userId)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("user with the given ID does not exist");
+        }
+
+        // delete the user by id
+        userRepository.deleteById(userId);
+        return ResponseEntity.status(HttpStatus.OK).body("user deletion is successful");
     }
 }
