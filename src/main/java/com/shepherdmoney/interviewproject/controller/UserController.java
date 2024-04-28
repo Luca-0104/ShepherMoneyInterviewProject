@@ -1,19 +1,56 @@
 package com.shepherdmoney.interviewproject.controller;
 
+import com.shepherdmoney.interviewproject.model.User;
+import com.shepherdmoney.interviewproject.repository.UserRepository;
 import com.shepherdmoney.interviewproject.vo.request.CreateUserPayload;
+import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class UserController {
 
     // TODO: wire in the user repository (~ 1 line)
+    @Autowired
+    private UserRepository userRepository;
 
     @PutMapping("/user")
     public ResponseEntity<Integer> createUser(@RequestBody CreateUserPayload payload) {
         // TODO: Create an user entity with information given in the payload, store it in the database
         //       and return the id of the user in 200 OK response
-        return null;
+
+        // get the user info from the payload
+        String name = payload.getName();
+        String email = payload.getEmail();
+
+        // validate the payload
+        if (name == null || name.isEmpty() || email == null || email.isEmpty()) {
+            // payload invalid
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(-1);
+        }
+
+        // check if the username or email is already used
+        List<User> usersByName = userRepository.findAllByName("Lucas");
+        List<User> usersByEmail = userRepository.findAllByEmail(email);
+        if (!usersByName.isEmpty() || !usersByEmail.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(-1);
+        }
+
+        // create a new user entity according to the payload
+        User user = new User();
+        user.setName(payload.getName());
+        user.setEmail(payload.getEmail());
+        // store it in the database
+        userRepository.save(user);
+        // response
+        return ResponseEntity.status(HttpStatus.OK).body(user.getId());
+
     }
 
     @DeleteMapping("/user")

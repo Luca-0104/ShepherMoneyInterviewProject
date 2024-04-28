@@ -55,6 +55,6 @@ public class CreditCard {
     // https://stackoverflow.com/questions/25439813/difference-between-mapkey-mapkeycolumn-and-mapkeyjoincolumn-in-jpa-and-hiber
     @OneToMany(mappedBy = "creditCard", cascade = CascadeType.ALL)
     @MapKey(name = "date")
-    @OrderBy("date DESC")
+//    @OrderBy("date DESC")
     private TreeMap<LocalDate, BalanceHistory> balanceHistories;
 }
