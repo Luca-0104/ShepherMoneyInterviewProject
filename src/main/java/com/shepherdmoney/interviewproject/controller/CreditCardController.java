@@ -115,8 +115,36 @@ public class CreditCardController {
     public ResponseEntity<Integer> getUserIdForCreditCard(@RequestParam String creditCardNumber) {
         // TODO: Given a credit card number, efficiently find whether there is a user associated with the credit card
         //       If so, return the user id in a 200 OK response. If no such user exists, return 400 Bad Request
-        return null;
+
+        // validate the request parameter
+        if (!Utils.isValidRequestBodyParam(creditCardNumber)) {
+            // if the creditCardNumber is null or empty string
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(-1);
+        }
+
+        // query the creditCard instance by creditCardNumber
+        CreditCard creditCard = creditCardRepository.findByNumber(creditCardNumber).orElse(null);
+        // check if the creditCardNumber exists
+        if (creditCard == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(-1);
+        }
+
+        // get the owner of this credit card
+        User owner = creditCard.getOwner();
+        // check if the owner exist
+        if (owner == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(-1);
+        }
+
+        // check if the owner id still exist in the user table
+        if (!userRepository.existsById(owner.getId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(-1);
+        }
+
+        // return the user id in a 200 OK response
+        return ResponseEntity.status(HttpStatus.OK).body(owner.getId());
     }
+
 
 //    @PostMapping("/credit-card:update-balance")
 //    public SomeEnityData postMethodName(@RequestBody UpdateBalancePayload[] payload) {
