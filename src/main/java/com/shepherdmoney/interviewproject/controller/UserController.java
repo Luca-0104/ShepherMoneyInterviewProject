@@ -2,6 +2,7 @@ package com.shepherdmoney.interviewproject.controller;
 
 import com.shepherdmoney.interviewproject.model.User;
 import com.shepherdmoney.interviewproject.repository.UserRepository;
+import com.shepherdmoney.interviewproject.utils.Utils;
 import com.shepherdmoney.interviewproject.vo.request.CreateUserPayload;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,13 @@ public class UserController {
         String email = payload.getEmail();
 
         // validate the payload
-        if (name == null || name.isEmpty() || email == null || email.isEmpty()) {
+        if (!Utils.isValidRequestBodyParam(name) || !Utils.isValidRequestBodyParam(email)) {
             // payload invalid
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(-1);
         }
+
+        // TODO: validate the email format
+
 
         // check if the username or email is already used
         if (userRepository.existsByName(name) || userRepository.existsByEmail(email)){
