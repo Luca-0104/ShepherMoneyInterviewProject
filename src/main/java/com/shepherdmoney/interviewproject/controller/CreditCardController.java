@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -82,7 +84,31 @@ public class CreditCardController {
     public ResponseEntity<List<CreditCardView>> getAllCardOfUser(@RequestParam int userId) {
         // TODO: return a list of all credit card associated with the given userId, using CreditCardView class
         //       if the user has no credit card, return empty list, never return null
-        return null;
+
+        // query the user instance from database
+        User user = userRepository.findById(userId).orElse(null);
+
+        // validate the userId
+        if (user == null) {
+            // user does not exist
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ArrayList<>());
+        }
+
+        // query the CreditCards of this user
+        Set<CreditCard> creditCards = user.getCreditCards();
+        if (creditCards == null) {
+            // if the user has no credit card, return empty list
+            return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<>());
+        }
+
+        // convert the CreditCard set to a list, and wrap each instance with CreditCardView
+        List<CreditCardView> creditCardViewList = new ArrayList<>();
+        for (CreditCard cc : creditCards) {
+            creditCardViewList.add(new CreditCardView(cc.getIssuanceBank(), cc.getNumber()));
+        }
+
+        // response the list of CreditCardView
+        return ResponseEntity.status(HttpStatus.OK).body(creditCardViewList);
     }
 
     @GetMapping("/credit-card:user-id")
