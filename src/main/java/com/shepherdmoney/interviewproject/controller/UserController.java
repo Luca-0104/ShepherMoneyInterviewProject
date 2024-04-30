@@ -5,10 +5,13 @@ import com.shepherdmoney.interviewproject.repository.UserRepository;
 import com.shepherdmoney.interviewproject.utils.Utils;
 import com.shepherdmoney.interviewproject.vo.request.CreateUserPayload;
 import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +25,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @PutMapping("/user")
-    public ResponseEntity<Integer> createUser(@RequestBody CreateUserPayload payload) {
+    public ResponseEntity<Integer> createUser(@Validated @RequestBody CreateUserPayload payload, BindingResult bindingResult) {
         // TODO: Create an user entity with information given in the payload, store it in the database
         //       and return the id of the user in 200 OK response
 
@@ -36,8 +39,13 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(-1);
         }
 
-        // TODO: validate the email format
-
+        // validate the payload, e.g. email format
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(e -> {
+                System.out.println("payload validation error: " + e.getDefaultMessage());
+            });
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(-1);
+        }
 
         // check if the username or email is already used
         if (userRepository.existsByName(name) || userRepository.existsByEmail(email)){
