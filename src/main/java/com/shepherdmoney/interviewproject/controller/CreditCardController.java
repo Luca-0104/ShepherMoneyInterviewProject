@@ -195,11 +195,29 @@ public class CreditCardController {
             Map<LocalDate, BalanceHistory> balanceHistories = creditCard.getBalanceHistories();
 
             // for test
-            System.out.println(balanceHistories.toString());
+//            if (balanceHistories.isEmpty()) {
+//                creditCard.setBalanceHistories(new TreeMap<>());
+//                balanceHistories = creditCard.getBalanceHistories();
+//            }
+
+            // for test
+            for (Map.Entry<LocalDate, BalanceHistory> entry : balanceHistories.entrySet()) {
+                System.out.println(entry.getKey() + "-----------" + entry.getValue());
+            }
+            break;
+
+            // for test
+//            BalanceHistory balanceHistory = new BalanceHistory();
+//            balanceHistory.setBalance(balanceAmount);
+//            balanceHistory.setCreditCard(creditCard);
+//            balanceHistory.setDate(balanceDate);
+//            balanceHistories.put(balanceDate, balanceHistory);
+//            creditCardRepository.save(creditCard);
 
             // fill the gaps with the previous data
 
         }
+
 
         return null;
     }

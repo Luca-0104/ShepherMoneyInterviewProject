@@ -25,6 +25,7 @@ public class BalanceHistory {
 
     // relationship with the CreditCard table
     @ManyToOne
+    @ToString.Exclude
     private CreditCard creditCard;
     
 }

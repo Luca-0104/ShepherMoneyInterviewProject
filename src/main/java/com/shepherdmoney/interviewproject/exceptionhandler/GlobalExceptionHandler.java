@@ -36,13 +36,13 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * handle the missing request body errors
+     * handle the request body errors (e.g. request body missing)
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseBody
-    public ResponseEntity<String> handelMissingRequestBodyException(Exception e) {
+    public ResponseEntity<String> handelInvalidRequestBodyException(Exception e) {
         e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Required request body is missing.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Required request body is invalid.");
     }
 
 }

@@ -1,17 +1,16 @@
 package com.shepherdmoney.interviewproject.model;
 
+import com.sun.source.tree.Tree;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SortNatural;
 import org.hibernate.collection.spi.PersistentSortedMap;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Entity
 @Getter
@@ -53,12 +52,16 @@ public class CreditCard {
     //        5. It is possible that there are gaps in between dates (note the 04-13 and 04-16)
     //        6. In the condition that there are gaps, retrieval of "closest" balance date should also be fast. Aka, given 4-15, return 4-16 entry tuple
 
+    // !! in the TODO, it says "with the most recent date appearing first in the list. Additionally, the last object in the "list" must have a date value that matches today's date"
+    // but, this requirement is self-conflict !
+    // So, in my implementation, we just assume it means an ASC order.
     // use TreeMap to ensure sorting by date
     // refer to this blog:
     // https://stackoverflow.com/questions/25439813/difference-between-mapkey-mapkeycolumn-and-mapkeyjoincolumn-in-jpa-and-hiber
     @OneToMany(mappedBy = "creditCard", cascade = CascadeType.ALL)
     @MapKey(name = "date")
-//    @OrderBy("date DESC")
     @MapKeyTemporal(TemporalType.DATE)
+    @SortNatural   // sort it in ASC order
     private Map<LocalDate, BalanceHistory> balanceHistories = new TreeMap<>();
+
 }
