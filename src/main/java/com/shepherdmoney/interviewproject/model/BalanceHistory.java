@@ -27,5 +27,10 @@ public class BalanceHistory {
     @ManyToOne
     @ToString.Exclude
     private CreditCard creditCard;
-    
+
+    public BalanceHistory(LocalDate date, double balance, CreditCard creditCard) {
+        this.date = date;
+        this.balance = balance;
+        this.creditCard = creditCard;
+    }
 }
