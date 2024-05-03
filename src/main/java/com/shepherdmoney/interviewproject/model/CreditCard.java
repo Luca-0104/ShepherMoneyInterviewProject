@@ -1,13 +1,11 @@
 package com.shepherdmoney.interviewproject.model;
 
-import com.sun.source.tree.Tree;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.SortNatural;
-import org.hibernate.collection.spi.PersistentSortedMap;
 
 import java.time.LocalDate;
 import java.util.*;

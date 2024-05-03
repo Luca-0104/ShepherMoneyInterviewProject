@@ -146,23 +146,6 @@ public class CreditCardController {
         return ResponseEntity.status(HttpStatus.OK).body(owner.getId());
     }
 
-
-//    @PostMapping("/credit-card:update-balance")
-//    public SomeEnityData postMethodName(@RequestBody UpdateBalancePayload[] payload) {
-//        //TODO: Given a list of transactions, update credit cards' balance history.
-//        //      1. For the balance history in the credit card
-//        //      2. If there are gaps between two balance dates, fill the empty date with the balance of the previous date
-//        //      3. Given the payload `payload`, calculate the balance different between the payload and the actual balance stored in the database
-//        //      4. If the different is not 0, update all the following budget with the difference
-//        //      For example: if today is 4/12, a credit card's balanceHistory is [{date: 4/12, balance: 110}, {date: 4/10, balance: 100}],
-//        //      Given a balance amount of {date: 4/11, amount: 110}, the new balanceHistory is
-//        //      [{date: 4/12, balance: 120}, {date: 4/11, balance: 110}, {date: 4/10, balance: 100}]
-//        //      Return 200 OK if update is done and successful, 400 Bad Request if the given card number
-//        //        is not associated with a card.
-//
-//        return null;
-//    }
-
     @PostMapping("/credit-card:update-balance")
     public ResponseEntity<String> updateBalanceHistoriesByTransactions(@RequestBody UpdateBalancePayload[] payloads) {
         //TODO: Given a list of transactions, update credit cards' balance history.
@@ -264,48 +247,6 @@ public class CreditCardController {
 
         return ResponseEntity.status(HttpStatus.OK).body("balance histories updated");
 
-    }
-
-
-    // insert balance histories for test
-    // should be removed finally
-    @PostMapping("/credit-card:test-insert-balance")
-    public ResponseEntity<String> insertBalanceHistoriesTestingData(@RequestBody UpdateBalancePayload[] payloads) {
-        // validate the payload
-        for (UpdateBalancePayload payload : payloads) {
-            // return 400 bad request if any given card number is not associated with a card
-            String creditCardNumber = payload.getCreditCardNumber();
-            if (!creditCardRepository.existsByNumber(creditCardNumber)){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("not all card numbers associated with a card");
-            }
-            // return 400 bad request if any given traction date is even after today
-            if (payload.getBalanceDate().isAfter(LocalDate.now())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("not all transaction date valid, there should not be any future transactions");
-            }
-        }
-
-        for (UpdateBalancePayload payload : payloads) {
-            // destructure
-            String creditCardNumber = payload.getCreditCardNumber();
-            LocalDate balanceDate = payload.getBalanceDate();
-            double balanceAmount = payload.getBalanceAmount();
-
-            // query the credit card instance, it will not be null
-            CreditCard creditCard = creditCardRepository.findByNumber(creditCardNumber).get();
-            Map<LocalDate, BalanceHistory> balanceHistories = creditCard.getBalanceHistories();
-
-            BalanceHistory bh = new BalanceHistory(balanceDate, balanceAmount, creditCard);
-            balanceHistories.put(balanceDate, bh);
-            creditCardRepository.save(creditCard);
-        }
-
-        CreditCard creditCard = creditCardRepository.findByNumber("1234").get();
-        Map<LocalDate, BalanceHistory> balanceHistories = creditCard.getBalanceHistories();
-        for (Map.Entry<LocalDate, BalanceHistory> entry : balanceHistories.entrySet()) {
-            System.out.println(entry.getKey() + "-----------" + entry.getValue());
-        }
-
-        return null;
     }
     
 }
