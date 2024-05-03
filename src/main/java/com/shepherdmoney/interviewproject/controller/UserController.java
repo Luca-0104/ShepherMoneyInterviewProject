@@ -66,11 +66,11 @@ public class UserController {
 
         // check if a user with the given ID exists
         if (!userRepository.existsById(userId)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("user with the given ID does not exist");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("user with the given ID " + userId + " does not exist");
         }
 
         // delete the user by id
         userRepository.deleteById(userId);
-        return ResponseEntity.status(HttpStatus.OK).body("user deletion is successful");
+        return ResponseEntity.status(HttpStatus.OK).body("The user with id " + userId + " is deleted successfully.");
     }
 }
